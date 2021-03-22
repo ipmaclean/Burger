@@ -1,0 +1,24 @@
+﻿@inherits LayoutComponentBase
+
+<div class="top-bar">
+    <a class="logo" href="">
+        <div id="brand">BURG<i class="fas fa-hamburger"></i>R</div>
+    </a>
+
+    <NavLink href="" class="nav-tab" Match="NavLinkMatch.All">
+        <i class="fas fa-hamburger"></i>
+        <div>Make A Burger</div>
+    </NavLink>
+
+
+    <NavLink href="myorders" class="nav-tab">
+        <i class="fas fa-car-side"></i>
+        <div>My Orders</div>
+    </NavLink>
+
+</div>
+
+<div class="content">
+    @Body
+</div>
+

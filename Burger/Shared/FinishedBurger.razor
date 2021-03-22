@@ -1,0 +1,28 @@
+﻿@using BurgerStore.Data
+
+<div class="cart-item">
+    <a @onclick="OnRemoved" class="delete-item">x</a>
+    @if (Burger.Bun != null)
+    {
+        <div class="title">@Burger.Bun.Name Bun</div>
+    }
+    else
+    {
+        <div class="title">No Bun</div>
+    }
+
+    <ul>
+        @foreach (var patty in Burger.Patties)
+        {
+            <li>+ @patty.Name</li>
+        }
+    </ul>
+    <div class="item-price">
+        £@Burger.GetFormattedBurgerPrice()
+    </div>
+</div>
+
+@code {
+    [Parameter] public Burger Burger { get; set; }
+    [Parameter] public EventCallback OnRemoved { get; set; }
+}

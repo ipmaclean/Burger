@@ -1,0 +1,150 @@
+﻿@page "/"
+
+@using BurgerStore.Data
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+@inject MenuController MenuController
+@inject OrderState OrderState
+@inject NavigationManager NavigationManager
+@inject OrderController OrderController
+
+
+
+<div class="sidebar">
+    <div class="sidebar-burger">
+        @if (OrderState.Burger.Bun == null && OrderState.Burger.Patties.Count == 0)
+        {
+            <div class="empty-cart pt-5">Start building<br>your burger</div>
+        }
+        else
+        {
+
+            <div>
+                @if (OrderState.Burger.Bun != null)
+                {
+                    <ul class="burger-creator burger-creator-bun-top">
+                        <li></li>
+                    </ul>
+                }
+            </div>
+            <div>
+                <ul class="burger-creator burger-creator-patty">
+
+                    @foreach (var patty in OrderState.Burger.Patties)
+                    {
+                        <li style="background-color:@patty.Color">@patty.Name <button type="button" @onclick="() => OrderState.Burger.Patties.Remove(patty)">X</button></li>
+                    }
+
+                </ul>
+            </div>
+            <div>
+                @if (OrderState.Burger.Bun != null)
+                {
+                    <ul class="burger-creator burger-creator-bun-bottom">
+
+                        <li>@OrderState.Burger.Bun.Name <button type="button" @onclick="() => OrderState.Burger.Bun = null">X</button></li>
+
+                    </ul>
+                }
+            </div>
+
+            <button @onclick="() => OrderState.Burger = new Burger()">Clear my burger!</button>
+
+            <div class="mt-5 text-center">
+                <p>Total cost: £@OrderState.Burger.GetFormattedBurgerPrice()</p>
+                <button type="button" @onclick="() => OrderState.AddBurgerToOrder(OrderState.Burger)">Add to order</button>
+            </div>
+
+        }
+    </div>
+
+    <div>
+
+        @foreach (var finishedBurger in OrderState.Order.Burgers)
+        {
+            <FinishedBurger Burger="finishedBurger" OnRemoved="@(() => OrderState.RemoveBurger(finishedBurger))" />
+        }
+
+        <EditForm Model="OrderState.Order" OnValidSubmit="PlaceOrder">
+            <div class="order-total @(OrderState.Order.Burgers.Any() ? "" : "hidden")">
+                Total:
+                <span class="total-price">£@OrderState.Order.GetFormattedOrderPrice()</span>
+                <button type="submit" class="@(OrderState.Order.Burgers.Count == 0 ? "btn btn-warning disabled" : "btn btn-warning")" disabled="@isSubmitting">
+                    Order >
+                </button>
+            </div>
+        </EditForm>
+    </div>
+
+</div>
+
+<div class="main">
+
+
+    @if (buns == null || patties == null)
+    {
+        <div class="loading-bar"></div>
+    }
+    else
+    {
+        <h2 class="text-center">Choose your bun!</h2>
+        <ul class="burger-cards">
+            @foreach (var bun in buns)
+            {
+                <li @onclick="() => OrderState.AddItemToBurger(bun)" style="background-image: url('images/@bun.Image')">
+                    <div class="burger-info">
+                        <span class="title">@bun.Name</span>
+                        @bun.Description
+                        <span class="price">£@bun.GetFormattedBasePrice()</span>
+                    </div>
+                </li>
+            }
+        </ul>
+
+        <h2 class="text-center">Choose your patties!</h2>
+        <ul class="burger-cards">
+            @foreach (var patty in patties)
+            {
+                <li @onclick="() => OrderState.AddItemToBurger(patty)" style="background-image: url('images/@patty.Image')">
+                    <div class="burger-info">
+                        <span class="title">@patty.Name</span>
+                        @patty.Description
+                        <span class="price">£@patty.GetFormattedBasePrice()</span>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+<div class="over-ordered" hidden="@OrderState.HideOverOrderBox">
+    <div>
+        <button class="close-button" @onclick="() => OrderState.HideOverOrderBox = true">X</button>
+        <div class="p-4">@OrderState.OverOrderMessage!</div>
+    </div>
+</div>
+
+
+@code {
+
+    private List<Patty> patties;
+    private List<Bun> buns;
+    bool isSubmitting = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        patties = await MenuController.GetPatties();
+        buns = await MenuController.GetBuns();
+    }
+
+    async Task PlaceOrder()
+    {
+        isSubmitting = true;
+
+        var newOrderId = await OrderController.PlaceOrder(OrderState.Order);
+        OrderState.ResetOrder();
+        isSubmitting = false;
+        NavigationManager.NavigateTo($"myorders/{newOrderId}");
+
+    }
+}

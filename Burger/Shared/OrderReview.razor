@@ -1,0 +1,36 @@
+﻿@using BurgerStore.Data
+
+@foreach (var burger in Order.Burgers)
+{
+    <p>
+        <strong>
+            @if (burger.Bun != null)
+            {
+            <span>@burger.Bun.Name Bun</span>
+            }
+            else
+            {
+                <span>No Bun</span>
+            }
+            (£@burger.GetFormattedBurgerPrice())
+        </strong>
+    </p>
+
+    <ul>
+        @foreach (var patty in burger.Patties)
+        {
+            <li>+ @patty.Name</li>
+        }
+    </ul>
+}
+
+<p>
+    <strong>
+        Total price:
+        £@Order.GetFormattedOrderPrice()
+    </strong>
+</p>
+
+@code {
+    [Parameter] public Order Order { get; set; }
+}
