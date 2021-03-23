@@ -2,6 +2,6 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs/Burger
-/Burger/obj/Release/net5.0/RazorDeclaration/Pages/Index.razor.g.cs
-/.vs/slnx.sqlite
+/.vs
+/Burger/bin
+/Burger/obj
