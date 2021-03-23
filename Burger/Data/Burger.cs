@@ -7,8 +7,12 @@ namespace BurgerStore.Data
 {
     public class Burger
     {
+        public Burger()
+        {
+            BurgerPatties = new HashSet<BurgerPatty>();
+        }
         public int ID { get; set; }
-        public List<Patty> Patties { get; set; } = new List<Patty>();
+        public HashSet<BurgerPatty> BurgerPatties { get; set; } = new HashSet<BurgerPatty>();
         public Bun Bun { get; set; }
 
         public decimal CalculateBurgerPrice()
@@ -19,10 +23,8 @@ namespace BurgerStore.Data
             {
                 price += Bun.BasePrice;
             }
-            foreach (Patty patty in Patties)
-            {
-                price += patty.BasePrice;
-            }
+
+            price += BurgerPatties.Sum(burgerPatty => burgerPatty.Patty.BasePrice);
 
             return price;
         }

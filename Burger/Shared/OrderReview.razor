@@ -17,9 +17,9 @@
     </p>
 
     <ul>
-        @foreach (var patty in burger.Patties)
+        @foreach (var burgerPatty in burger.BurgerPatties.OrderBy(burgerPatty => burgerPatty.SortOrder))
         {
-            <li>+ @patty.Name</li>
+        <li>+ @burgerPatty.Patty.Name</li>
         }
     </ul>
 }

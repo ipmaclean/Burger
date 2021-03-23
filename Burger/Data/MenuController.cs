@@ -18,12 +18,12 @@ namespace BurgerStore.Data
 
         public async Task<List<Bun>> GetBuns()
         {
-            return (await _context.Buns.ToListAsync()).OrderByDescending(b => b.BasePrice).ToList();
+            return (await _context.Buns.OrderByDescending(b => b.BasePrice).ToListAsync());
         }
 
         public async Task<List<Patty>> GetPatties()
         {
-            return (await _context.Patties.ToListAsync()).OrderByDescending(p => p.BasePrice).ToList();
+            return (await _context.Patties.OrderByDescending(p => p.BasePrice).ToListAsync());
         }
     }
 }

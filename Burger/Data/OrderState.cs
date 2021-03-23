@@ -14,14 +14,19 @@ namespace BurgerStore.Data
 
         public void AddItemToBurger(Patty patty)
         {
-            if (Burger.Patties.Count >= 3)
+            if (Burger.BurgerPatties.Count >= 3)
             {
                 OverOrderMessage = "You've tried to order too many patties! We can't fit that many in the bun!";
                 HideOverOrderBox = false;
             }
             else
             {
-                Burger.Patties.Add(patty);
+                Burger.BurgerPatties.Add(new BurgerPatty()
+                {
+                    Patty = patty,
+                    SortOrder = (Burger.BurgerPatties.Any() ? Burger.BurgerPatties.Max(burgerPatty => burgerPatty.SortOrder) : 0) + 1
+                }) ;
+               
             }
         }
 
