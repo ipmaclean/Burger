@@ -16,6 +16,8 @@ namespace BurgerStore.Data
         public DbSet<Patty> Patties { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Burger> Burgers { get; set; }
+        public DbSet<BurgerPatty> BurgerPatties { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,6 +25,7 @@ namespace BurgerStore.Data
             modelBuilder.Entity<Patty>().ToTable("Patty");
             modelBuilder.Entity<Order>().ToTable("Order");
             modelBuilder.Entity<Burger>().ToTable("Burger");
+            modelBuilder.Entity<BurgerPatty>().ToTable("BurgerPatty");
         }
     }
 }

@@ -12,7 +12,7 @@
 
 <div class="sidebar">
     <div class="sidebar-burger">
-        @if (OrderState.Burger.Bun == null && OrderState.Burger.Patties.Count == 0)
+        @if (OrderState.Burger.Bun == null && OrderState.Burger.BurgerPatties.Count == 0)
         {
             <div class="empty-cart pt-5">Start building<br>your burger</div>
         }
@@ -30,9 +30,9 @@
             <div>
                 <ul class="burger-creator burger-creator-patty">
 
-                    @foreach (var patty in OrderState.Burger.Patties)
+                    @foreach (var burgerPatty in OrderState.Burger.BurgerPatties.OrderBy(burgerPatty => burgerPatty.SortOrder))
                     {
-                        <li style="background-color:@patty.Color">@patty.Name <button type="button" @onclick="() => OrderState.Burger.Patties.Remove(patty)">X</button></li>
+                    <li style="background-color:@burgerPatty.Patty.Color">@burgerPatty.Patty.Name <button type="button" @onclick="() => OrderState.Burger.BurgerPatties.Remove(burgerPatty)">X</button></li>
                     }
 
                 </ul>

@@ -21,15 +21,15 @@ namespace BurgerStore.Data
 
             order.CreatedTime = DateTime.Now;
 
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-            return order.OrderID;
+                _context.Orders.Add(order);
+                await _context.SaveChangesAsync();
+                return order.OrderID;
         }
 
         public async Task<List<Order>> GetOrders()
         {
             var orders = await _context.Orders
-                .Include(o => o.Burgers).ThenInclude(b => b.Patties)
+                .Include(o => o.Burgers).ThenInclude(b => b.BurgerPatties)
                 .OrderByDescending(o => o.CreatedTime)
                 .ToListAsync();
 
@@ -40,7 +40,7 @@ namespace BurgerStore.Data
         {
             var order = await _context.Orders
                 .Where(o => o.OrderID == orderId)
-                .Include(o => o.Burgers).ThenInclude(b => b.Patties)
+                .Include(o => o.Burgers).ThenInclude(b => b.BurgerPatties)
                 .SingleOrDefaultAsync();
 
             if (order == null)
